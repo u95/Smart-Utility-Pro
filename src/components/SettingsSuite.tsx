@@ -11,10 +11,20 @@ interface SettingsSuiteProps {
   setAccentColor: (color: AccentColor) => void;
   isPremium: boolean;
   setIsPremium: (prem: boolean) => void;
+  githubUrl: string;
+  setGithubUrl: (url: string) => void;
   onBack: () => void;
 }
 
-export function SettingsSuite({ accentColor, setAccentColor, isPremium, setIsPremium, onBack }: SettingsSuiteProps) {
+export function SettingsSuite({ 
+  accentColor, 
+  setAccentColor, 
+  isPremium, 
+  setIsPremium, 
+  githubUrl, 
+  setGithubUrl, 
+  onBack 
+}: SettingsSuiteProps) {
   const [securityPin, setSecurityPin] = useState('2026');
   const [allowNotifications, setAllowNotifications] = useState(true);
   const [diagnosticMode, setDiagnosticMode] = useState(false);
@@ -217,13 +227,39 @@ export function SettingsSuite({ accentColor, setAccentColor, isPremium, setIsPre
             <span className="text-xs font-semibold uppercase tracking-wider">GitHub Repository</span>
           </div>
 
+          <div className="space-y-2">
+            <label className="text-[10px] text-slate-400 font-mono uppercase block">Customize Repository Link</label>
+            <div className="flex gap-2">
+              <input
+                type="text"
+                value={githubUrl}
+                onChange={(e) => {
+                  setGithubUrl(e.target.value);
+                  localStorage.setItem('sup_github_url', e.target.value);
+                }}
+                placeholder="https://github.com/username/repository"
+                className="flex-1 bg-slate-950 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-slate-200 placeholder-slate-600 focus:outline-none focus:border-indigo-500 font-mono transition-colors"
+              />
+              <button
+                onClick={() => {
+                  const defaultUrl = 'https://github.com';
+                  setGithubUrl(defaultUrl);
+                  localStorage.setItem('sup_github_url', defaultUrl);
+                }}
+                className="px-2.5 py-1.5 bg-slate-900 border border-slate-800 hover:bg-slate-850 text-slate-400 hover:text-white text-[10px] rounded-xl font-bold transition-all cursor-pointer"
+              >
+                Reset
+              </button>
+            </div>
+          </div>
+
           <div className="flex justify-between items-center bg-slate-950/60 p-3 rounded-2xl border border-slate-850">
             <div className="space-y-0.5">
               <span className="text-xs font-bold text-slate-300 block">Open Source Code</span>
-              <span className="text-[10px] text-slate-500 font-mono">View project on GitHub</span>
+              <span className="text-[10px] text-slate-500 font-mono">Launch link in a new tab</span>
             </div>
             <a
-              href="https://github.com"
+              href={githubUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="px-3.5 py-1.5 bg-slate-900 hover:bg-slate-850 border border-slate-800 text-slate-200 text-xs rounded-xl font-bold flex items-center gap-1.5 transition-colors cursor-pointer"

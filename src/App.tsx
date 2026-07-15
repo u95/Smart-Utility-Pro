@@ -37,6 +37,9 @@ export default function App() {
   const [activeScreen, setActiveScreen] = useState<ScreenID>('dashboard');
   const [accentColor, setAccentColor] = useState<AccentColor>('indigo');
   const [isPremium, setIsPremium] = useState<boolean>(false);
+  const [githubUrl, setGithubUrl] = useState<string>(() => {
+    return localStorage.getItem('sup_github_url') || 'https://github.com';
+  });
 
   // Search & categories filters
   const [searchQuery, setSearchQuery] = useState('');
@@ -189,7 +192,7 @@ export default function App() {
                       {/* Upgrade badge or indicators */}
                       <div className="flex items-center gap-2">
                         <a 
-                          href="https://github.com"
+                          href={githubUrl}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="p-2 bg-slate-800 hover:bg-slate-750 border border-slate-750 rounded-2xl flex items-center justify-center transition-colors cursor-pointer"
@@ -241,6 +244,36 @@ export default function App() {
                             {filter}
                           </button>
                         ))}
+                      </div>
+
+                      {/* GitHub Integration Prominent Card */}
+                      <div className="bg-gradient-to-r from-slate-950 to-slate-900 border border-slate-850 rounded-2xl p-3.5 flex items-center justify-between gap-3 shadow-inner" id="dashboard-github-banner">
+                        <div className="flex items-center gap-3">
+                          <div className={`w-9 h-9 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-center text-white`}>
+                            <Github size={18} className={textAccentClass} />
+                          </div>
+                          <div>
+                            <span className="text-[9px] uppercase tracking-wider text-indigo-400 font-bold block">SOURCE CODE REPOSITORY</span>
+                            <span className="text-xs font-bold text-slate-200">GitHub Repository Link</span>
+                            <span className="text-[10px] text-slate-400 font-mono block max-w-[170px] truncate mt-0.5">{githubUrl}</span>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <a 
+                            href={githubUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="px-3.5 py-1.5 bg-slate-800 hover:bg-slate-750 border border-slate-700 text-xs font-bold text-slate-100 rounded-xl transition-all cursor-pointer flex items-center gap-1.5 shadow-sm"
+                          >
+                            <span>Open</span>
+                          </a>
+                          <button 
+                            onClick={() => handleNavigateToTool('settings')}
+                            className="px-2 py-1.5 bg-slate-900 hover:bg-slate-850 border border-slate-800 text-xs font-bold text-slate-400 hover:text-white rounded-xl transition-all cursor-pointer"
+                          >
+                            Edit
+                          </button>
+                        </div>
                       </div>
 
                       {/* Tools Bento / List Grid layout */}
@@ -397,6 +430,8 @@ export default function App() {
                       setAccentColor={setAccentColor}
                       isPremium={isPremium}
                       setIsPremium={setIsPremium}
+                      githubUrl={githubUrl}
+                      setGithubUrl={setGithubUrl}
                       onBack={() => setActiveScreen('dashboard')} 
                     />
                   </motion.div>
