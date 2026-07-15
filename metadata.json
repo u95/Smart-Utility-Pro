@@ -1,0 +1,11 @@
+{
+  "name": "Smart Utility Pro",
+  "description": "The ultimate mobile utility workspace. Includes PDF & Image editors, QR tools, document scanner, file manager, advanced calculators, unit converters, secure password vault, notes, network tools, and speed test.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
