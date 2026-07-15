@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { 
   FileText, Image, Video, QrCode, Camera, Folder, Calculator, 
   RefreshCw, FileEdit, Shield, Download, Wifi, Smartphone, 
-  Settings, Search, Sparkles, Star, Grid, Menu, Bell, HelpCircle, Github
+  Settings, Search, Sparkles, Star, Grid, Menu, Bell, HelpCircle, Github, Cloud
 } from 'lucide-react';
 
 import { AccentColor } from './types';
@@ -25,11 +25,12 @@ import { DownloadManagerSim } from './components/DownloadManagerSim';
 import { WiFiToolsSuite } from './components/WiFiToolsSuite';
 import { DeviceInfoSuite } from './components/DeviceInfoSuite';
 import { SettingsSuite } from './components/SettingsSuite';
+import { BuildDeploymentSim } from './components/BuildDeploymentSim';
 
 type ScreenID = 
   | 'dashboard' | 'pdf' | 'image' | 'video' | 'qr' | 'scanner' 
   | 'file' | 'calculator' | 'converter' | 'notes' | 'vault' 
-  | 'download' | 'wifi' | 'device' | 'settings';
+  | 'download' | 'wifi' | 'device' | 'settings' | 'build_deploy';
 
 export default function App() {
   // Navigation & global settings state
@@ -127,7 +128,8 @@ export default function App() {
     { id: 'vault', title: 'Password Shield', desc: 'AES locked vault & biometric scanner', category: 'Security', icon: <Shield size={18} />, premium: true },
     { id: 'download', title: 'Download Manager', desc: 'Concurrent multi-threaded pipeline', category: 'Productivity', icon: <Download size={18} />, premium: false },
     { id: 'wifi', title: 'WiFi Analyzer', desc: 'Ping jitter, MAC details & speed test', category: 'Hardware', icon: <Wifi size={18} />, premium: false },
-    { id: 'device', title: 'Device Info', desc: 'Octa-core telemetry & accelerometer', category: 'Hardware', icon: <Smartphone size={18} />, premium: false }
+    { id: 'device', title: 'Device Info', desc: 'Octa-core telemetry & accelerometer', category: 'Hardware', icon: <Smartphone size={18} />, premium: false },
+    { id: 'build_deploy', title: 'Cloud Build & Deploy', desc: 'Simulate container builds & Cloud Run pipelines', category: 'Hardware', icon: <Cloud size={18} />, premium: true }
   ];
 
   // Filters the dashboard grid list
@@ -432,7 +434,19 @@ export default function App() {
                       setIsPremium={setIsPremium}
                       githubUrl={githubUrl}
                       setGithubUrl={setGithubUrl}
+                      onNavigateToBuildDeploy={() => setActiveScreen('build_deploy')}
                       onBack={() => setActiveScreen('dashboard')} 
+                    />
+                  </motion.div>
+                )}
+
+                {/* CLOUD BUILD & DEPLOYMENT */}
+                {activeScreen === 'build_deploy' && (
+                  <motion.div key="build_deploy" className="h-full w-full">
+                    <BuildDeploymentSim 
+                      accentColor={accentColor} 
+                      onBack={() => setActiveScreen('dashboard')} 
+                      triggerAd={triggerAd}
                     />
                   </motion.div>
                 )}

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
 import { 
   Settings, ArrowLeft, Palette, Shield, CreditCard, Bell, 
-  Trash2, HelpCircle, Heart, Star, Sparkles, Check, Github
+  Trash2, HelpCircle, Heart, Star, Sparkles, Check, Github, Cloud
 } from 'lucide-react';
 import { AccentColor, AppSettings } from '../types';
 
@@ -13,6 +13,7 @@ interface SettingsSuiteProps {
   setIsPremium: (prem: boolean) => void;
   githubUrl: string;
   setGithubUrl: (url: string) => void;
+  onNavigateToBuildDeploy?: () => void;
   onBack: () => void;
 }
 
@@ -23,6 +24,7 @@ export function SettingsSuite({
   setIsPremium, 
   githubUrl, 
   setGithubUrl, 
+  onNavigateToBuildDeploy,
   onBack 
 }: SettingsSuiteProps) {
   const [securityPin, setSecurityPin] = useState('2026');
@@ -267,6 +269,28 @@ export function SettingsSuite({
               <Github size={12} />
               <span>GitHub Link</span>
             </a>
+          </div>
+        </div>
+
+        {/* CLOUD BUILD & DEPLOYMENT ACTIONS */}
+        <div className="bg-slate-800/30 border border-slate-800 p-4 rounded-3xl space-y-3.5" id="settings-build-deploy-section">
+          <div className="flex items-center gap-1.5 text-slate-300 border-b border-slate-800 pb-2 mb-1">
+            <Cloud size={14} className={textAccentClass} />
+            <span className="text-xs font-semibold uppercase tracking-wider">Cloud Build & Deploy</span>
+          </div>
+
+          <div className="flex justify-between items-center bg-slate-950/60 p-3 rounded-2xl border border-slate-850">
+            <div className="space-y-0.5">
+              <span className="text-xs font-bold text-slate-300 block">Build & Release Center</span>
+              <span className="text-[10px] text-slate-500 font-mono">Trigger containerized deployments</span>
+            </div>
+            <button
+              onClick={onNavigateToBuildDeploy}
+              className={`px-3.5 py-1.5 ${activeAccentClass} text-white hover:opacity-90 text-xs rounded-xl font-bold flex items-center gap-1.5 transition-all cursor-pointer`}
+            >
+              <Cloud size={12} />
+              <span>Open Console</span>
+            </button>
           </div>
         </div>
 
