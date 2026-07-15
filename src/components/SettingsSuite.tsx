@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
 import { 
   Settings, ArrowLeft, Palette, Shield, CreditCard, Bell, 
-  Trash2, HelpCircle, Heart, Star, Sparkles, Check
+  Trash2, HelpCircle, Heart, Star, Sparkles, Check, Github
 } from 'lucide-react';
 import { AccentColor, AppSettings } from '../types';
 
@@ -207,6 +207,30 @@ export function SettingsSuite({ accentColor, setAccentColor, isPremium, setIsPre
             >
               {allowNotifications ? 'Enabled' : 'Disabled'}
             </button>
+          </div>
+        </div>
+
+        {/* OPEN SOURCE / GITHUB */}
+        <div className="bg-slate-800/30 border border-slate-800 p-4 rounded-3xl space-y-3.5" id="github-section">
+          <div className="flex items-center gap-1.5 text-slate-300 border-b border-slate-800 pb-2 mb-1">
+            <Github size={14} className={textAccentClass} />
+            <span className="text-xs font-semibold uppercase tracking-wider">GitHub Repository</span>
+          </div>
+
+          <div className="flex justify-between items-center bg-slate-950/60 p-3 rounded-2xl border border-slate-850">
+            <div className="space-y-0.5">
+              <span className="text-xs font-bold text-slate-300 block">Open Source Code</span>
+              <span className="text-[10px] text-slate-500 font-mono">View project on GitHub</span>
+            </div>
+            <a
+              href="https://github.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-3.5 py-1.5 bg-slate-900 hover:bg-slate-850 border border-slate-800 text-slate-200 text-xs rounded-xl font-bold flex items-center gap-1.5 transition-colors cursor-pointer"
+            >
+              <Github size={12} />
+              <span>GitHub Link</span>
+            </a>
           </div>
         </div>
 

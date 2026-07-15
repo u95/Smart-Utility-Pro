@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { 
   FileText, Image, Video, QrCode, Camera, Folder, Calculator, 
   RefreshCw, FileEdit, Shield, Download, Wifi, Smartphone, 
-  Settings, Search, Sparkles, Star, Grid, Menu, Bell, HelpCircle
+  Settings, Search, Sparkles, Star, Grid, Menu, Bell, HelpCircle, Github
 } from 'lucide-react';
 
 import { AccentColor } from './types';
@@ -187,16 +187,28 @@ export default function App() {
                       </div>
 
                       {/* Upgrade badge or indicators */}
-                      <button 
-                        onClick={() => handleNavigateToTool('settings')}
-                        className={`p-2 bg-slate-800 hover:bg-slate-750 border border-slate-750 rounded-2xl flex items-center justify-center transition-colors cursor-pointer relative ${isPremium ? 'border-amber-500/30' : ''}`}
-                      >
-                        {isPremium ? (
-                          <Star size={16} className="text-amber-400 fill-amber-400" />
-                        ) : (
-                          <Settings size={16} className="text-slate-400" />
-                        )}
-                      </button>
+                      <div className="flex items-center gap-2">
+                        <a 
+                          href="https://github.com"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="p-2 bg-slate-800 hover:bg-slate-750 border border-slate-750 rounded-2xl flex items-center justify-center transition-colors cursor-pointer"
+                          title="View on GitHub"
+                        >
+                          <Github size={16} className="text-slate-400 hover:text-white transition-colors" />
+                        </a>
+
+                        <button 
+                          onClick={() => handleNavigateToTool('settings')}
+                          className={`p-2 bg-slate-800 hover:bg-slate-750 border border-slate-750 rounded-2xl flex items-center justify-center transition-colors cursor-pointer relative ${isPremium ? 'border-amber-500/30' : ''}`}
+                        >
+                          {isPremium ? (
+                            <Star size={16} className="text-amber-400 fill-amber-400" />
+                          ) : (
+                            <Settings size={16} className="text-slate-400" />
+                          )}
+                        </button>
+                      </div>
                     </div>
 
                     {/* Dashboard body scroll section */}
