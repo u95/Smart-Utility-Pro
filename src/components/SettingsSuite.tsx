@@ -31,12 +31,31 @@ export function SettingsSuite({
   const [allowNotifications, setAllowNotifications] = useState(true);
   const [diagnosticMode, setDiagnosticMode] = useState(false);
 
+  // AdMob states
+  const [admobAppId, setAdmobAppId] = useState('ca-app-pub-3940256099942544~3347511713');
+  const [admobBannerId, setAdmobBannerId] = useState('ca-app-pub-3940256099942544/6300978111');
+  const [admobInterstitialId, setAdmobInterstitialId] = useState('ca-app-pub-3940256099942544/1033173712');
+
   useEffect(() => {
     const savedPin = localStorage.getItem('sup_vault_pin');
     if (savedPin) {
       setSecurityPin(savedPin);
     }
+    
+    const savedAppId = localStorage.getItem('admob_app_id');
+    const savedBannerId = localStorage.getItem('admob_banner_id');
+    const savedInterstitialId = localStorage.getItem('admob_interstitial_id');
+    if (savedAppId) setAdmobAppId(savedAppId);
+    if (savedBannerId) setAdmobBannerId(savedBannerId);
+    if (savedInterstitialId) setAdmobInterstitialId(savedInterstitialId);
   }, []);
+
+  const handleSaveAdMob = () => {
+    localStorage.setItem('admob_app_id', admobAppId);
+    localStorage.setItem('admob_banner_id', admobBannerId);
+    localStorage.setItem('admob_interstitial_id', admobInterstitialId);
+    alert("AdMob Configuration Saved Successfully!");
+  };
 
   const handleUpdatePin = () => {
     const code = prompt("Configure new 4-digit Vault Access PIN code:", securityPin);
@@ -291,6 +310,58 @@ export function SettingsSuite({
               <Cloud size={12} />
               <span>Open Console</span>
             </button>
+          </div>
+        </div>
+
+        {/* GOOGLE ADMOB CONFIGURATION */}
+        <div className="bg-slate-800/30 border border-slate-800 p-4 rounded-3xl space-y-3.5" id="settings-admob-config-section">
+          <div className="flex items-center gap-1.5 text-slate-300 border-b border-slate-800 pb-2 mb-1">
+            <Star size={14} className="text-amber-500" />
+            <span className="text-xs font-semibold uppercase tracking-wider">Google AdMob Configuration</span>
+          </div>
+
+          <div className="space-y-3">
+            <div>
+              <label className="text-[10px] font-mono text-slate-400 block mb-1">AdMob App ID</label>
+              <input
+                type="text"
+                value={admobAppId}
+                onChange={(e) => setAdmobAppId(e.target.value)}
+                placeholder="ca-app-pub-xxxxxxxxxxxxxxxx~xxxxxxxxxx"
+                className="w-full bg-slate-950 border border-slate-850 rounded-xl px-3 py-2 text-xs font-mono text-slate-300 focus:outline-none focus:border-indigo-500 transition-colors"
+              />
+            </div>
+
+            <div>
+              <label className="text-[10px] font-mono text-slate-400 block mb-1">Banner Ad Unit ID</label>
+              <input
+                type="text"
+                value={admobBannerId}
+                onChange={(e) => setAdmobBannerId(e.target.value)}
+                placeholder="ca-app-pub-xxxxxxxxxxxxxxxx/xxxxxxxxxx"
+                className="w-full bg-slate-950 border border-slate-850 rounded-xl px-3 py-2 text-xs font-mono text-slate-300 focus:outline-none focus:border-indigo-500 transition-colors"
+              />
+            </div>
+
+            <div>
+              <label className="text-[10px] font-mono text-slate-400 block mb-1">Interstitial Ad Unit ID</label>
+              <input
+                type="text"
+                value={admobInterstitialId}
+                onChange={(e) => setAdmobInterstitialId(e.target.value)}
+                placeholder="ca-app-pub-xxxxxxxxxxxxxxxx/xxxxxxxxxx"
+                className="w-full bg-slate-950 border border-slate-850 rounded-xl px-3 py-2 text-xs font-mono text-slate-300 focus:outline-none focus:border-indigo-500 transition-colors"
+              />
+            </div>
+
+            <div className="pt-1 flex justify-end">
+              <button
+                onClick={handleSaveAdMob}
+                className={`px-4 py-2 ${activeAccentClass} text-white hover:opacity-95 text-xs font-bold rounded-xl transition-all shadow-md cursor-pointer`}
+              >
+                Save AdMob IDs
+              </button>
+            </div>
           </div>
         </div>
 

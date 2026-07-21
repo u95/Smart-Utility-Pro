@@ -4,14 +4,26 @@ import { X, Play, ShieldAlert, Award, Star } from 'lucide-react';
 
 // Bottom inline banner simulation
 export function AdMobSim() {
+  const [bannerId, setBannerId] = useState('ca-app-pub-3940256099942544/6300978111');
+
+  useEffect(() => {
+    const savedBanner = localStorage.getItem('admob_banner_id');
+    if (savedBanner) {
+      setBannerId(savedBanner);
+    }
+  }, []);
+
   return (
     <div 
       className="h-[50px] bg-slate-950 border-t border-slate-850 flex items-center justify-between px-4 text-slate-500 font-mono text-[9px]"
       id="admob-banner-banner"
     >
-      <div className="flex items-center gap-1.5">
-        <span className="bg-amber-500/10 text-amber-500 border border-amber-500/30 px-1 rounded-sm text-[8px] font-bold">AD</span>
-        <span className="truncate max-w-[180px]">Upgrade to Smart Premium Version for ad-free workspace</span>
+      <div className="flex items-center gap-1.5 overflow-hidden">
+        <span className="bg-amber-500/10 text-amber-500 border border-amber-500/30 px-1 rounded-sm text-[8px] font-bold shrink-0">AD</span>
+        <span className="truncate max-w-[140px] sm:max-w-[240px] text-slate-400">
+          Unit: {bannerId.substring(0, 15)}...{bannerId.substring(bannerId.length - 10)}
+        </span>
+        <span className="hidden md:inline text-slate-600">| Simulating banner load</span>
       </div>
       <button 
         onClick={() => window.open('https://ai.studio/build', '_blank')}
@@ -32,6 +44,14 @@ interface InterstitialAdProps {
 export function InterstitialAd({ isOpen, onClose }: InterstitialAdProps) {
   const [countdown, setCountdown] = useState(5);
   const [canClose, setCanClose] = useState(false);
+  const [interstitialId, setInterstitialId] = useState('ca-app-pub-3940256099942544/1033173712');
+
+  useEffect(() => {
+    const savedInterstitial = localStorage.getItem('admob_interstitial_id');
+    if (savedInterstitial) {
+      setInterstitialId(savedInterstitial);
+    }
+  }, []);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -68,7 +88,7 @@ export function InterstitialAd({ isOpen, onClose }: InterstitialAdProps) {
         <div className="flex items-center justify-between" id="admob-header">
           <div className="flex items-center gap-2 bg-neutral-800 px-3 py-1 rounded-full text-xs text-neutral-300 font-mono">
             <ShieldAlert size={14} className="text-amber-500" />
-            <span>AdMob Simulation</span>
+            <span>AdMob Live Simulation</span>
           </div>
           <button
             onClick={onClose}
@@ -100,8 +120,8 @@ export function InterstitialAd({ isOpen, onClose }: InterstitialAdProps) {
           <div className="relative w-full max-w-sm aspect-video rounded-xl bg-neutral-900 border border-neutral-800 overflow-hidden flex flex-col justify-between p-4 shadow-inner">
             <div className="flex items-start justify-between">
               <span className="text-[10px] uppercase font-bold bg-amber-500 text-black px-1.5 py-0.5 rounded tracking-wider">Sponsored</span>
-              <span className="text-xs text-neutral-400 font-mono flex items-center gap-1">
-                Support dev
+              <span className="text-[9px] text-neutral-500 font-mono flex items-center gap-1">
+                ID: {interstitialId.substring(0, 16)}...
               </span>
             </div>
 
@@ -140,7 +160,7 @@ export function InterstitialAd({ isOpen, onClose }: InterstitialAdProps) {
             Install App From Play Store
           </button>
           
-          <p className="text-[10px] text-neutral-500 text-center">
+          <p className="text-[10px] text-neutral-500 text-center font-mono">
             {canClose 
               ? '✓ You can close this advertisement now.'
               : `You can skip this ad in ${countdown} seconds.`
