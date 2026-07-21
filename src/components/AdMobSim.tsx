@@ -1,17 +1,53 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { X, Play, ShieldAlert, Award, Star } from 'lucide-react';
+import { Capacitor } from '@capacitor/core';
+import { AdMob, BannerAdSize, BannerAdPosition } from '@capacitor-community/admob';
 
 // Bottom inline banner simulation
 export function AdMobSim() {
-  const [bannerId, setBannerId] = useState('ca-app-pub-3940256099942544/6300978111');
+  const [bannerId, setBannerId] = useState('ca-app-pub-4931646089594136/8294150886');
+  const [isNativeAdVisible, setIsNativeAdVisible] = useState(false);
 
   useEffect(() => {
     const savedBanner = localStorage.getItem('admob_banner_id');
+    const finalBannerId = savedBanner || 'ca-app-pub-4931646089594136/8294150886';
     if (savedBanner) {
       setBannerId(savedBanner);
     }
+    
+    // Attempt to load native banner if on device
+    if (Capacitor.isNativePlatform()) {
+      const showNativeBanner = async () => {
+        try {
+          await AdMob.showBanner({
+            adId: finalBannerId,
+            adSize: BannerAdSize.BANNER,
+            position: BannerAdPosition.BOTTOM_CENTER,
+            margin: 0,
+            isTesting: false
+          });
+          setIsNativeAdVisible(true);
+        } catch (e) {
+          console.error("Failed to show native banner", e);
+        }
+      };
+      
+      showNativeBanner();
+      
+      return () => {
+        try {
+          AdMob.hideBanner().catch(e => console.error(e));
+          AdMob.removeBanner().catch(e => console.error(e));
+        } catch (e) {}
+      };
+    }
   }, []);
+
+  if (isNativeAdVisible) {
+    // If native ad is shown, we just render an empty spacer so content isn't hidden under it
+    return <div className="h-[50px] w-full" />;
+  }
 
   return (
     <div 

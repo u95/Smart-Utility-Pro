@@ -32,8 +32,8 @@ export function SettingsSuite({
   const [diagnosticMode, setDiagnosticMode] = useState(false);
 
   // AdMob states
-  const [admobAppId, setAdmobAppId] = useState('ca-app-pub-3940256099942544~3347511713');
-  const [admobBannerId, setAdmobBannerId] = useState('ca-app-pub-3940256099942544/6300978111');
+  const [admobAppId, setAdmobAppId] = useState('ca-app-pub-4931646089594136~6521904212');
+  const [admobBannerId, setAdmobBannerId] = useState('ca-app-pub-4931646089594136/8294150886');
   const [admobInterstitialId, setAdmobInterstitialId] = useState('ca-app-pub-3940256099942544/1033173712');
 
   useEffect(() => {
