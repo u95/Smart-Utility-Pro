@@ -49,6 +49,7 @@ export default function App() {
   const [activeFilter, setActiveFilter] = useState<'All' | 'Productivity' | 'Media' | 'Security' | 'Hardware'>('All');
 
   // AdMob interstitial state
+  const [adMobInitialized, setAdMobInitialized] = useState(false);
   const [showInterstitial, setShowInterstitial] = useState(false);
   const [onAdComplete, setOnAdComplete] = useState<() => void>(() => {});
 
@@ -69,9 +70,13 @@ export default function App() {
           if (Capacitor.getPlatform() === 'ios') {
             await AdMob.requestTrackingAuthorization();
           }
+          setAdMobInitialized(true);
         } catch (e) {
           console.error('Failed to initialize AdMob', e);
+          setAdMobInitialized(true);
         }
+      } else {
+        setAdMobInitialized(true);
       }
     };
     initializeAdMob();
@@ -283,36 +288,6 @@ export default function App() {
                         ))}
                       </div>
 
-                      {/* GitHub Integration Prominent Card */}
-                      <div className="bg-gradient-to-r from-slate-950 to-slate-900 border border-slate-850 rounded-2xl p-3.5 flex items-center justify-between gap-3 shadow-inner" id="dashboard-github-banner">
-                        <div className="flex items-center gap-3">
-                          <div className={`w-9 h-9 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-center text-white`}>
-                            <Github size={18} className={textAccentClass} />
-                          </div>
-                          <div>
-                            <span className="text-[9px] uppercase tracking-wider text-indigo-400 font-bold block">SOURCE CODE REPOSITORY</span>
-                            <span className="text-xs font-bold text-slate-200">GitHub Repository Link</span>
-                            <span className="text-[10px] text-slate-400 font-mono block max-w-[170px] truncate mt-0.5">{githubUrl}</span>
-                          </div>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <a 
-                            href={githubUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="px-3.5 py-1.5 bg-slate-800 hover:bg-slate-750 border border-slate-700 text-xs font-bold text-slate-100 rounded-xl transition-all cursor-pointer flex items-center gap-1.5 shadow-sm"
-                          >
-                            <span>Open</span>
-                          </a>
-                          <button 
-                            onClick={() => handleNavigateToTool('settings')}
-                            className="px-2 py-1.5 bg-slate-900 hover:bg-slate-850 border border-slate-800 text-xs font-bold text-slate-400 hover:text-white rounded-xl transition-all cursor-pointer"
-                          >
-                            Edit
-                          </button>
-                        </div>
-                      </div>
-
                       {/* Tools Bento / List Grid layout */}
                       <div className="grid grid-cols-1 gap-2.5 pt-1" id="dash-grid-bento">
                         {filteredTools.map((tool) => (
@@ -493,7 +468,7 @@ export default function App() {
         </AnimatePresence>
 
         {/* GOOGLE ADMOB INTEGRATION */}
-        {!isPremium && activeScreen === 'dashboard' && !showOnboarding && (
+        {!isPremium && activeScreen === 'dashboard' && !showOnboarding && adMobInitialized && (
           <AdMobSim key="admob-banner" />
         )}
 
