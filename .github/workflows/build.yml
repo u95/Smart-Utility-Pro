@@ -1,4 +1,4 @@
-name: Build and Lint
+name: Build APK
 
 on:
   push:
@@ -19,11 +19,27 @@ jobs:
         with:
           node-version: 20
 
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
       - name: Install dependencies
         run: npm install
 
-      - name: Lint
-        run: npm run lint
-
-      - name: Build
+      - name: Build Web App
         run: npm run build
+
+      - name: Sync Capacitor Android
+        run: npx cap sync android
+
+      - name: Build APK
+        working-directory: ./android
+        run: ./gradlew assembleDebug
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-debug
+          path: android/app/build/outputs/apk/debug/app-debug.apk
