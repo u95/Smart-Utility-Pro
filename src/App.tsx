@@ -196,7 +196,27 @@ export default function App() {
       setActiveScreen(toolId);
     });
   };
+useEffect(() => {
+  async function loadBanner() {
+    // Android/iOS-ல் மட்டும் இயக்கு
+    if (Capacitor.getPlatform() === "android") {
+      try {
+        await AdMob.initialize();
 
+        await AdMob.showBanner({
+          adId: "ca-app-pub-4931646089594136/8294150886",
+          position: "BOTTOM_CENTER",
+        });
+
+        console.log("Banner Loaded");
+      } catch (err) {
+        console.error("AdMob Error:", err);
+      }
+    }
+  }
+
+  loadBanner();
+}, []);
   return (
     <div className="flex justify-center items-center w-full min-h-screen bg-slate-950 p-0 sm:p-4 text-white selection:bg-indigo-500/20" id="smart-utility-app">
       
