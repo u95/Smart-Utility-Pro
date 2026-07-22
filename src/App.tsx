@@ -12,6 +12,11 @@ import { AccentColor } from './types';
 import { AdMobSim, InterstitialAd } from './components/AdMobSim';
 import { Onboarding } from './components/Onboarding';
 
+
+import { AdMob } from "@capacitor-community/admob";
+import { Capacitor } from "@capacitor/core";
+import { useEffect } from "react";
+
 // Tool workspaces
 import { PDFTools } from './components/PDFTools';
 import { ImageTools } from './components/ImageTools';
