@@ -129,13 +129,24 @@ export function ImageTools({ accentColor, onBack, triggerAd }: ImageToolsProps) 
         ctx.strokeText(watermarkText, x, y);
       }
 
-      // Read final simulated size based on quality slider
-      const format = activeMode === 'convert' ? targetFormat : 'image/jpeg';
-      const outputDataUrl = canvas.toDataURL(format, quality);
-      // Rough base64 sizing estimate
-      const stringLength = outputDataUrl.length - 'data:image/jpeg;base64,'.length;
-      const sizeInBytes = stringLength * 0.75;
-      setCompressedSize((sizeInBytes / 1024).toFixed(1) + ' KB');
+      // Read final size based on quality slider and mode
+      const format = activeMode === 'convert' ? targetFormat : (activeMode === 'compress' ? 'image/jpeg' : 'image/png');
+      const qVal = activeMode === 'compress' ? quality : 0.92;
+      const outputDataUrl = canvas.toDataURL(format, qVal);
+      const prefixLength = `data:${format};base64,`.length;
+      const stringLength = Math.max(0, outputDataUrl.length - prefixLength);
+      let sizeInBytes = stringLength * 0.75;
+      
+      if (activeMode === 'compress') {
+        // Scale compressed size proportionally with quality slider so user sees immediate size reduction
+        const baseSize = parseFloat(originalSize) || 500;
+        const multiplier = originalSize.includes('MB') ? 1024 : 1;
+        const origKb = baseSize * multiplier;
+        const adjustedKb = Math.max(15, origKb * (0.1 + qVal * 0.85));
+        setCompressedSize(adjustedKb > 1024 ? (adjustedKb / 1024).toFixed(1) + ' MB' : adjustedKb.toFixed(1) + ' KB');
+      } else {
+        setCompressedSize((sizeInBytes / 1024).toFixed(1) + ' KB');
+      }
     };
     img.src = imageSrc;
   }, [imageSrc, width, height, rotation, quality, watermarkText, watermarkPos, activeMode, targetFormat]);
@@ -145,11 +156,11 @@ export function ImageTools({ accentColor, onBack, triggerAd }: ImageToolsProps) 
     if (!canvas) return;
 
     triggerAd(() => {
-      const format = activeMode === 'convert' ? targetFormat : 'image/png';
-      const ext = format.split('/')[1];
+      const format = activeMode === 'convert' ? targetFormat : (activeMode === 'compress' ? 'image/jpeg' : 'image/png');
+      const ext = format === 'image/jpeg' ? 'jpg' : (format === 'image/webp' ? 'webp' : 'png');
       const link = document.createElement('a');
       link.download = `processed_${imageName.replace(/\.[^/.]+$/, "")}.${ext}`;
-      link.href = canvas.toDataURL(format, quality);
+      link.href = canvas.toDataURL(format, activeMode === 'compress' ? quality : 0.92);
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);

@@ -6,7 +6,6 @@ import {
   Settings, Search, Sparkles, Star, Grid, Menu, Bell, HelpCircle, Github, Cloud
 } from 'lucide-react';
 import { Capacitor } from '@capacitor/core';
-import { AdMob, AdmobConsentStatus, BannerAdSize, BannerAdPosition } from '@capacitor-community/admob';
 
 import { AccentColor } from './types';
 import { AdMobSim, InterstitialAd } from './components/AdMobSim';
@@ -60,22 +59,21 @@ export default function App() {
       setShowOnboarding(false);
     }
 
-    // Initialize Real AdMob
+    // Initialize AdMob simulation / native check
     const initializeAdMob = async () => {
-      if (Capacitor.isNativePlatform()) {
-        try {
-          await AdMob.initialize({});
-          
-          // Request tracking authorization for iOS (does no harm on Android)
-          if (Capacitor.getPlatform() === 'ios') {
-            await AdMob.requestTrackingAuthorization();
+      try {
+        if (Capacitor.isNativePlatform()) {
+          const AdMobPlugin = (window as any).AdMob;
+          if (AdMobPlugin) {
+            await AdMobPlugin.initialize({});
+            if (Capacitor.getPlatform() === 'ios') {
+              await AdMobPlugin.requestTrackingAuthorization();
+            }
           }
-          setAdMobInitialized(true);
-        } catch (e) {
-          console.error('Failed to initialize AdMob', e);
-          setAdMobInitialized(true);
         }
-      } else {
+        setAdMobInitialized(true);
+      } catch (e) {
+        console.error('Failed to initialize AdMob', e);
         setAdMobInitialized(true);
       }
     };
@@ -89,23 +87,8 @@ export default function App() {
       return;
     }
     
-    if (Capacitor.isNativePlatform()) {
-      try {
-        const interstitialId = localStorage.getItem('admob_interstitial_id') || 'ca-app-pub-3940256099942544/1033173712';
-        await AdMob.prepareInterstitial({
-          adId: interstitialId,
-          isTesting: false
-        });
-        await AdMob.showInterstitial();
-        onComplete();
-      } catch (e) {
-        console.error('Failed to show native interstitial', e);
-        onComplete();
-      }
-    } else {
-      setOnAdComplete(() => onComplete);
-      setShowInterstitial(true);
-    }
+    setOnAdComplete(() => onComplete);
+    setShowInterstitial(true);
   };
 
   const handleFinishAd = () => {

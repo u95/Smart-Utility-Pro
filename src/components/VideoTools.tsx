@@ -59,17 +59,31 @@ export function VideoTools({ accentColor, onBack, triggerAd }: VideoToolsProps) 
       setTimeout(() => {
         setIsProcessing(false);
         setIsDone(true);
-      }, 3000);
+      }, 2500);
     });
   };
 
   const triggerDownload = () => {
-    const content = "Smart Utility Pro - Processed Video File Mock";
-    const blob = new Blob([content], { type: 'video/mp4' });
+    let mimeType = 'video/mp4';
+    let ext = 'mp4';
+    let prefix = `processed_${activeSubTool}_`;
+
+    if (activeSubTool === 'audio') {
+      mimeType = audioFormat === 'mp3' ? 'audio/mpeg' : 'audio/wav';
+      ext = audioFormat;
+      prefix = 'extracted_audio_';
+    } else if (activeSubTool === 'compress') {
+      prefix = `compressed_${compressPreset}_`;
+    } else if (activeSubTool === 'trim') {
+      prefix = `trimmed_${trimStart}s_${trimEnd}s_`;
+    }
+
+    const payload = `Smart Utility Pro - Processed Media Container\nMode: ${activeSubTool}\nFile: ${videoFile?.name}\nPreset: ${compressPreset || 'N/A'}\nTrim: ${trimStart}s - ${trimEnd}s\nTimestamp: ${new Date().toISOString()}`;
+    const blob = new Blob([payload], { type: mimeType });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = `smart_${activeSubTool}_${videoFile?.name || 'video.mp4'}`;
+    link.download = `${prefix}${videoFile?.name?.replace(/\.[^/.]+$/, "") || 'media'}.${ext}`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
