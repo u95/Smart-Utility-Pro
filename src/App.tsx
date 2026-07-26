@@ -81,14 +81,8 @@ export default function App() {
   }, []);
 
   const triggerAd = async (onComplete: () => void) => {
-    if (isPremium) {
-      // Skip advertisement for premium users
-      onComplete();
-      return;
-    }
-    
-    setOnAdComplete(() => onComplete);
-    setShowInterstitial(true);
+    // Execute tool directly without blocking popups
+    onComplete();
   };
 
   const handleFinishAd = () => {
