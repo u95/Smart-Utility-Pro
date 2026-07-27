@@ -9,11 +9,15 @@ export function AdMobSim() {
   const [isNativeAdVisible, setIsNativeAdVisible] = useState(false);
 
   useEffect(() => {
-    const savedBanner = localStorage.getItem('admob_banner_id');
-    const finalBannerId = savedBanner || 'ca-app-pub-4931646089594136/8294150886';
-    if (savedBanner) {
-      setBannerId(savedBanner);
-    }
+    const updateBanner = () => {
+      const savedBanner = localStorage.getItem('admob_banner_id');
+      if (savedBanner) {
+        setBannerId(savedBanner);
+      }
+    };
+    updateBanner();
+    window.addEventListener('storage', updateBanner);
+    return () => window.removeEventListener('storage', updateBanner);
   }, []);
 
   if (isNativeAdVisible) {

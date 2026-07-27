@@ -54,6 +54,7 @@ export function SettingsSuite({
     localStorage.setItem('admob_app_id', admobAppId);
     localStorage.setItem('admob_banner_id', admobBannerId);
     localStorage.setItem('admob_interstitial_id', admobInterstitialId);
+    window.dispatchEvent(new Event('storage'));
     alert("AdMob Configuration Saved Successfully!");
   };
 
