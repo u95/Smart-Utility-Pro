@@ -1,7 +1,7 @@
 import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'com.smartutility.app',
+  appId: 'com.umnministry.smartutilitypro.app',
   appName: 'Smart Utility Pro',
   webDir: 'dist'
 };
