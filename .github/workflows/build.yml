@@ -47,7 +47,8 @@ jobs:
         working-directory: ./android
         run: |
           echo "sdk.dir=$ANDROID_SDK_ROOT" > local.properties
-          gradle assembleDebug --stacktrace
+          gradle wrapper --gradle-version 8.2.1
+          ./gradlew assembleDebug --info --stacktrace
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
