@@ -45,7 +45,11 @@ export function SettingsSuite({
     const savedAppId = localStorage.getItem('admob_app_id');
     const savedBannerId = localStorage.getItem('admob_banner_id');
     const savedInterstitialId = localStorage.getItem('admob_interstitial_id');
-    if (savedAppId) setAdmobAppId(savedAppId);
+    if (savedAppId) {
+      setAdmobAppId(savedAppId);
+    } else {
+      localStorage.setItem('admob_app_id', 'ca-app-pub-4931646089594136~6521904212');
+    }
     if (savedBannerId) setAdmobBannerId(savedBannerId);
     if (savedInterstitialId) setAdmobInterstitialId(savedInterstitialId);
   }, []);
